@@ -1,0 +1,435 @@
+/* ───── Outer container — alto para dar espacio al scroll de 10 etapas ───── */
+.section {
+  position: relative;
+  height: 1100vh;          /* 10 etapas × 110vh aprox para suavidad */
+  background: var(--deep-black);
+}
+
+/* Snap target: línea invisible que el navegador usa como punto de ancla.
+ * scroll-snap-align: start hace que cuando el usuario para de scrollear
+ * cerca de este punto, el navegador suaviza al exacto. */
+.snapTarget {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  pointer-events: none;
+  scroll-snap-align: center;
+  scroll-snap-stop: normal;
+}
+
+/* ───── Sticky stage — se queda fijo durante el scroll ───── */
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  display: grid;
+  perspective: 1600px;
+}
+
+.bgGlow {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  transition: background 0.3s linear;
+}
+
+.grid {
+  z-index: 0;
+  opacity: 0.5;
+}
+
+/* ───── Header lateral con título principal ───── */
+.header {
+  position: absolute;
+  top: 12vh;
+  left: clamp(24px, 5vw, 64px);
+  z-index: 4;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  pointer-events: none;
+}
+
+.title {
+  background: linear-gradient(180deg, #FFFFFF 10%, #888 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  font-size: clamp(28px, 3.6vw, 44px);
+  line-height: 1.05;
+}
+
+.titleAccent {
+  background: linear-gradient(135deg, #FFFFFF 0%, #D8D8E0 50%, #888894 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  max-width: 320px;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+/* ───── Stage central donde se muestran las imágenes apiladas ───── */
+.stage {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 2;
+  pointer-events: none;
+  perspective: 1400px;
+}
+
+.stageImg {
+  position: absolute;
+  width: clamp(320px, 60vw, 820px);
+  aspect-ratio: 16 / 11;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+}
+
+.partWrapper {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.partTurntable {
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+
+  /* Glow sutil que sigue el contorno real de la pieza.
+   * Bajamos la intensidad para que se sienta premium, no neón.
+   *   1ª capa: halo blanco discreto cerca del borde
+   *   2ª capa: glow azul muy suave (toque tech, casi imperceptible)
+   *   3ª capa: sombra de contacto al piso
+   */
+  filter:
+    drop-shadow(0 0 14px rgba(255, 255, 255, 0.22))
+    drop-shadow(0 0 50px rgba(170, 210, 255, 0.10))
+    drop-shadow(0 32px 36px rgba(0, 0, 0, 0.55));
+}
+
+/* Glow ambiental detrás de la pieza, muy sutil */
+.stageGlow {
+  position: absolute;
+  width: clamp(420px, 70vw, 1000px);
+  aspect-ratio: 1;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.05) 0%,
+    rgba(170, 210, 255, 0.03) 35%,
+    transparent 70%
+  );
+  filter: blur(50px);
+  pointer-events: none;
+  z-index: 1;
+  will-change: opacity;
+  animation: pulse 8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-50%, -50%) scale(1.05); }
+}
+
+.placeholder {
+  display: none;  /* se muestra solo si la img falla */
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  border: 1px dashed var(--border-default);
+  border-radius: var(--radius-lg);
+  background:
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.06), transparent 60%),
+    var(--bg-elevated);
+  gap: 12px;
+  padding: 32px;
+  text-align: center;
+}
+
+.placeholderTag {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-orange);
+  padding: 6px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.placeholderHint {
+  font-size: 13px;
+  color: var(--text-tertiary);
+  line-height: 1.6;
+}
+
+.placeholderHint code {
+  display: inline-block;
+  margin-top: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-primary);
+  background: var(--bg-base);
+  padding: 4px 10px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-default);
+}
+
+/* ───── Caption de cada etapa, abajo a la derecha ───── */
+.caption {
+  position: absolute;
+  bottom: 8vh;
+  right: clamp(24px, 5vw, 64px);
+  z-index: 5;
+  max-width: 380px;
+  pointer-events: none;
+}
+
+.captionInner {
+  background: rgba(14, 14, 19, 0.5);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  padding: 24px 28px;
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.captionStage {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--accent-orange);
+  margin-bottom: 4px;
+}
+
+.captionTitle {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1.15;
+}
+
+.captionDesc {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.captionPos {
+  margin-top: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.captionPosLabel {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.captionPosValue {
+  font-size: 13px;
+  color: var(--text-primary);
+  font-weight: 500;
+  letter-spacing: -0.005em;
+}
+
+.captionSpec {
+  margin-top: 10px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-subtle);
+  font-size: 12px;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  opacity: 0.8;
+}
+
+/* ───── Indicador de progreso (puntitos verticales a la izquierda) ───── */
+.progressDots {
+  position: absolute;
+  top: 50%;
+  right: clamp(20px, 3vw, 32px);
+  transform: translateY(-50%);
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  pointer-events: none;
+}
+
+.dotRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 14px;
+  flex-direction: row-reverse;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent-orange);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.5);
+}
+
+.dotLine {
+  height: 1px;
+  width: 24px;
+  background: linear-gradient(to left, var(--accent-orange), transparent);
+}
+
+.dotLabel {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+/* ───── Barra de progreso al fondo ───── */
+.progressTrack {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 8;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    var(--rust-orange),
+    var(--accent-orange),
+    var(--accent-orange-soft)
+  );
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.6);
+}
+
+/* ───── Tablet ───── */
+@media (max-width: 1024px) {
+  .header {
+    top: 8vh;
+    max-width: 280px;
+  }
+  .title {
+    font-size: 28px;
+  }
+  .subtitle {
+    font-size: 13px;
+  }
+  .caption {
+    bottom: 4vh;
+    right: 16px;
+    max-width: 280px;
+  }
+  .captionInner {
+    padding: 16px 20px;
+  }
+  .captionTitle { font-size: 18px; }
+  .captionDesc { font-size: 12px; }
+  .progressDots {
+    right: 12px;
+  }
+  .dotLabel {
+    display: none;  /* solo dots en tablet */
+  }
+}
+
+/* ───── Móvil ───── */
+@media (max-width: 720px) {
+  .section {
+    height: 1200vh;  /* un poco más alto para dar tiempo al usuario */
+  }
+  .header {
+    position: static;
+    text-align: center;
+    margin: 0 auto;
+    max-width: 90vw;
+    top: auto;
+    left: auto;
+    padding-top: 7vh;
+  }
+  .stage {
+    inset: 30vh 0 30vh 0;
+  }
+  .stageImg {
+    width: 90vw;
+  }
+  .caption {
+    position: static;
+    bottom: auto;
+    right: auto;
+    margin: 0 auto;
+    width: calc(100% - 32px);
+    max-width: 400px;
+  }
+  .progressDots {
+    flex-direction: row;
+    bottom: 24px;
+    right: 50%;
+    top: auto;
+    transform: translateX(50%);
+    gap: 6px;
+  }
+  .dotLine {
+    display: none;
+  }
+}
+
+/* ───── Reduced motion ───── */
+@media (prefers-reduced-motion: reduce) {
+  .stageImg {
+    transform: none !important;
+  }
+  .bgGlow {
+    transition: none;
+  }
+}

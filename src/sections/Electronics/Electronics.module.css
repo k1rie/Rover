@@ -1,0 +1,227 @@
+.section {
+  background: var(--bg-base);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+.diagram {
+  position: relative;
+  margin-bottom: 64px;
+}
+
+.busLine {
+  position: relative;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--accent-orange) 20%,
+    var(--accent-orange) 80%,
+    transparent
+  );
+  margin: 24px 0 32px;
+  display: flex;
+  justify-content: center;
+}
+
+.busLabel {
+  position: absolute;
+  top: -10px;
+  background: var(--bg-base);
+  padding: 0 16px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: var(--accent-orange);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  perspective: 1200px;
+}
+
+.node {
+  position: relative;
+  padding: 24px;
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-surface) 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.node:hover {
+  border-color: var(--border-default);
+  transform: translateY(-2px);
+}
+
+.highlight {
+  border-color: rgba(79, 138, 255, 0.3);
+  background:
+    radial-gradient(circle at 100% 0%, rgba(79, 138, 255, 0.08), transparent 60%),
+    linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-surface) 100%);
+}
+
+.nodeHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.iconWrap {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.16) 0%,
+    rgba(255, 255, 255, 0.04) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--accent-orange);
+}
+
+.highlight .iconWrap {
+  background: linear-gradient(
+    135deg,
+    rgba(79, 138, 255, 0.18) 0%,
+    rgba(79, 138, 255, 0.04) 100%
+  );
+  border-color: rgba(79, 138, 255, 0.25);
+  color: var(--accent-blue);
+}
+
+.role {
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--text-tertiary);
+}
+
+.title {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+.spec {
+  font-size: 12px;
+  color: var(--accent-orange);
+  letter-spacing: 0.02em;
+}
+
+.highlight .spec {
+  color: var(--accent-blue);
+}
+
+.note {
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.brain {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  display: flex;
+  gap: 4px;
+}
+
+.brain span {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  animation: blink 1.4s ease-in-out infinite;
+}
+
+.brain span:nth-child(2) { animation-delay: 0.2s; }
+.brain span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0.2; }
+  40% { opacity: 1; box-shadow: 0 0 6px rgba(79, 138, 255, 0.7); }
+}
+
+.dualPower {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  padding: 40px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, #0e0e14 0%, #08080c 100%);
+}
+
+.dualTitle {
+  font-size: clamp(20px, 2.4vw, 26px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--text-primary);
+  margin-top: 12px;
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.lineItem {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.lineDot {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-top: 6px;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.04);
+}
+
+.lineTitle {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.lineNote {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+@media (min-width: 720px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .dualPower {
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+}
+
+@media (min-width: 1080px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}

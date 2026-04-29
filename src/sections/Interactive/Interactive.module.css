@@ -1,0 +1,517 @@
+.section {
+  background: var(--bg-base);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+}
+
+/* ─── Layout principal ─── */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  margin-bottom: 56px;
+}
+
+@media (min-width: 980px) {
+  .grid {
+    grid-template-columns: 1.3fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+}
+
+/* ─── Lado de controles ─── */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* ─── Slider ─── */
+.slider {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 24px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.sliderHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.sliderLabel {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+  letter-spacing: -0.005em;
+}
+
+.sliderValue {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--accent);
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  min-width: 56px;
+  text-align: right;
+}
+
+.sliderTrack {
+  position: relative;
+  height: 32px;
+  display: flex;
+  align-items: center;
+}
+
+.sliderTrackBg {
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: var(--bg-base);
+  border-radius: 3px;
+  border: 1px solid var(--border-subtle);
+}
+
+.sliderCenterMark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1px;
+  height: 16px;
+  background: var(--border-strong);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.sliderFill {
+  position: absolute;
+  top: 50%;
+  height: 6px;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.4),
+    var(--accent)
+  );
+  border-radius: 3px;
+  transform: translateY(-50%);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+  transition: left 0.05s linear, width 0.05s linear;
+}
+
+.sliderInput {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: grab;
+  margin: 0;
+  padding: 0;
+}
+
+.sliderInput:active {
+  cursor: grabbing;
+}
+
+.sliderInput::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg-base);
+  box-shadow:
+    0 0 0 1px var(--border-strong),
+    0 4px 12px rgba(0, 0, 0, 0.5),
+    0 0 16px rgba(255, 255, 255, 0.4);
+  cursor: grab;
+  transition: transform 0.15s ease;
+}
+
+.sliderInput::-webkit-slider-thumb:hover {
+  transform: scale(1.1);
+}
+
+.sliderInput::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(0.95);
+}
+
+.sliderInput::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg-base);
+  box-shadow:
+    0 0 0 1px var(--border-strong),
+    0 4px 12px rgba(0, 0, 0, 0.5);
+  cursor: grab;
+}
+
+.sliderHint {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+}
+
+.sliderHintMid {
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-family: var(--font-sans);
+  letter-spacing: 0;
+}
+
+/* ─── Fórmula ─── */
+.formula {
+  padding: 24px 28px;
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-surface) 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.formulaTitle {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 12px;
+}
+
+.formulaRow,
+.formulaSubst {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.formulaSubst {
+  font-size: 13px;
+  color: var(--text-secondary);
+  padding-left: 14px;
+  border-left: 2px solid var(--border-default);
+  margin: 4px 0 4px 4px;
+}
+
+.formulaVar {
+  color: var(--accent);
+  font-weight: 500;
+  min-width: 64px;
+}
+
+.formulaOp {
+  color: var(--text-secondary);
+}
+
+.formulaExpr {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.formulaPlus {
+  color: var(--text-tertiary);
+}
+
+.formulaResult {
+  color: var(--accent);
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Outcome ─── */
+.outcome {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 24px;
+  background:
+    radial-gradient(circle at 0% 50%, rgba(255, 255, 255, 0.05), transparent 60%),
+    var(--bg-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+}
+
+.outcomeIcon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.outcomeLabel {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 4px;
+}
+
+.outcomeValue {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+}
+
+/* ─── JSON preview ─── */
+.json {
+  padding: 20px 24px;
+  background: linear-gradient(180deg, #0a0a0e 0%, #07070a 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+}
+
+.jsonLabel {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+  margin-bottom: 10px;
+}
+
+.jsonCode {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.65;
+  color: var(--accent-soft);
+  font-variant-numeric: tabular-nums;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+/* ─── Visual del rover ─── */
+.visual {
+  padding: 32px;
+  background: linear-gradient(180deg, var(--bg-elevated) 0%, var(--bg-surface) 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: sticky;
+  top: 96px;
+}
+
+.visualLabel {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.diagram {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-subtle);
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.legendBar {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+}
+
+/* ─── Presets ─── */
+.presets {
+  padding: 24px 28px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.presetsLabel {
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.presetsRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.presetBtn {
+  padding: 10px 16px;
+  background: var(--bg-base);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-full);
+  color: var(--text-secondary);
+  font-size: 13px;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background 0.2s ease,
+    transform 0.15s ease;
+}
+
+.presetBtn:hover {
+  color: var(--text-primary);
+  border-color: var(--border-strong);
+  background: var(--bg-surface);
+  transform: translateY(-1px);
+}
+
+.presetBtn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 980px) {
+  .visual {
+    position: static;
+    padding: 24px;
+  }
+}
+
+/* Móvil — paddings y tamaños más cómodos para pantalla chica + touch */
+@media (max-width: 720px) {
+  .grid {
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .controls {
+    gap: 16px;
+  }
+
+  .slider,
+  .formula,
+  .outcome,
+  .json,
+  .visual,
+  .presets {
+    padding: 16px 18px;
+  }
+
+  .sliderHead {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .sliderLabel {
+    font-size: 13px;
+  }
+
+  .sliderValue {
+    font-size: 16px;
+    min-width: auto;
+  }
+
+  /* Hint del slider en móvil — solo extremos, sin texto medio */
+  .sliderHintMid {
+    display: none;
+  }
+
+  /* Thumb más grande para touch */
+  .sliderInput::-webkit-slider-thumb {
+    width: 28px;
+    height: 28px;
+  }
+  .sliderInput::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+  }
+
+  .formulaTitle,
+  .visualLabel,
+  .jsonLabel,
+  .outcomeLabel,
+  .presetsLabel {
+    font-size: 10px;
+  }
+
+  .formulaRow,
+  .formulaSubst {
+    font-size: 12px;
+  }
+
+  .formulaResult {
+    padding: 1px 6px;
+  }
+
+  .outcomeValue {
+    font-size: 15px;
+  }
+
+  .outcomeIcon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .jsonCode {
+    font-size: 11px;
+    line-height: 1.6;
+  }
+
+  .legend {
+    gap: 10px;
+    font-size: 11px;
+  }
+
+  .presetBtn {
+    padding: 8px 12px;
+    font-size: 12px;
+  }
+}

@@ -1,0 +1,112 @@
+.wrap {
+  background: linear-gradient(180deg, #0c0c12 0%, #08080c 100%);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.dots {
+  display: flex;
+  gap: 6px;
+}
+
+.dots span {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #2a2a32;
+}
+
+.dots span:nth-child(1) { background: #ff5f57; opacity: 0.55; }
+.dots span:nth-child(2) { background: #febc2e; opacity: 0.55; }
+.dots span:nth-child(3) { background: #28c840; opacity: 0.55; }
+
+.title {
+  flex: 1;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-tertiary);
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: var(--radius-sm);
+  font-size: 12px;
+  color: var(--text-secondary);
+  border: 1px solid var(--border-subtle);
+  background: var(--bg-elevated);
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.copy:hover {
+  color: var(--text-primary);
+  border-color: var(--border-default);
+}
+
+.pre {
+  margin: 0;
+  padding: 20px 0;
+  font-size: 13px;
+  line-height: 1.7;
+  overflow-x: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-default) transparent;
+}
+
+.pre::-webkit-scrollbar { height: 8px; }
+.pre::-webkit-scrollbar-track { background: transparent; }
+.pre::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: 4px;
+}
+
+.line {
+  display: flex;
+  white-space: pre;
+  padding: 0 20px;
+}
+
+.line:hover {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.lineNo {
+  display: inline-block;
+  width: 32px;
+  flex-shrink: 0;
+  color: var(--text-disabled);
+  user-select: none;
+  text-align: right;
+  margin-right: 16px;
+  font-size: 12px;
+}
+
+.lineText {
+  flex: 1;
+}
+
+/* Token colors */
+.keyword { color: #FF7AB6; }
+.type { color: #4ADE80; }
+.func { color: #4F8AFF; }
+.string { color: #FFB86C; }
+.number { color: #C084FC; }
+.constant { color: #FFD580; }
+.comment { color: #6B6B73; font-style: italic; }
+.punct { color: #B8B8C2; }
+.ident { color: #E5E5EB; }

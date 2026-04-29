@@ -1,0 +1,413 @@
+/* ───────────── Outer scroll container ───────────── */
+.section {
+  position: relative;
+  height: 500vh;
+  background: var(--deep-black);
+}
+
+/* Snap target invisible para scroll asistido. Solo cuando el usuario
+ * está cerca, scroll snap proximity hace ajuste suave al punto. */
+.snapTarget {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  pointer-events: none;
+  scroll-snap-align: center;
+  scroll-snap-stop: normal;
+}
+
+/* ───────────── Sticky stage ───────────── */
+.sticky {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  isolation: isolate;
+  perspective: 1400px;
+}
+
+/* Studio background — gradiente vertical limpio, sin dunas ni cielo cargado */
+.studioBg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(
+      ellipse 80% 50% at 50% 100%,
+      rgba(170, 210, 255, 0.06) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      ellipse 80% 60% at 50% 0%,
+      rgba(255, 255, 255, 0.04) 0%,
+      transparent 70%
+    ),
+    linear-gradient(180deg, #08080C 0%, #050507 60%, #030305 100%);
+}
+
+.grid {
+  z-index: 0;
+  opacity: 0.4;
+}
+
+/* ───────────── Particles drifting ───────────── */
+.particles {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  width: 130%;
+  will-change: transform;
+}
+
+.particles span {
+  position: absolute;
+  width: 2px;
+  height: 2px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.3);
+  animation: particleFloat 5s ease-in-out infinite;
+}
+
+@keyframes particleFloat {
+  0%, 100% { opacity: 0.2; transform: translateY(0); }
+  50%      { opacity: 1; transform: translateY(-12px); }
+}
+
+/* ───────────── Stage platform (spotlight pool) ───────────── */
+.stagePlatform {
+  position: absolute;
+  bottom: 18%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: clamp(500px, 70vw, 900px);
+  height: clamp(180px, 24vw, 320px);
+  z-index: 2;
+  pointer-events: none;
+  will-change: opacity;
+}
+
+.platformCore {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 60% 50% at 50% 50%,
+    rgba(255, 255, 255, 0.10) 0%,
+    rgba(170, 210, 255, 0.05) 35%,
+    transparent 65%
+  );
+  filter: blur(20px);
+  animation: platformPulse 6s ease-in-out infinite;
+}
+
+.platformRing {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 70%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  animation: ringPulse 5s ease-in-out infinite;
+}
+
+.platformRingFar {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 110%;
+  height: 95%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 1px solid rgba(170, 210, 255, 0.10);
+  animation: ringPulse 7s ease-in-out infinite reverse;
+}
+
+@keyframes platformPulse {
+  0%, 100% { opacity: 0.7; transform: scaleX(1); }
+  50%      { opacity: 1;   transform: scaleX(1.05); }
+}
+
+@keyframes ringPulse {
+  0%, 100% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+  50%      { opacity: 0.8; transform: translate(-50%, -50%) scale(1.04); }
+}
+
+/* ───────────── Title block ───────────── */
+.titleBlock {
+  position: absolute;
+  top: 12vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 0 24px;
+  max-width: 720px;
+  width: 100%;
+}
+
+.title {
+  background: linear-gradient(180deg, #FFFFFF 10%, #a8a8b0 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.titleBody {
+  max-width: 560px;
+  margin: 0 auto;
+  color: var(--text-secondary);
+}
+
+/* ───────────── Rover stage ─────────────
+   Container abs. ocupa todo el sticky y usa grid para centrar.
+   Esto evita el conflicto entre el transform de centrado y el
+   transform de motion (scale/y). */
+.roverContainer {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  z-index: 4;
+  pointer-events: none;
+  /* offset vertical pequeño para dejar espacio al título arriba */
+  padding-top: 4vh;
+}
+
+.roverStage {
+  width: clamp(360px, 65vw, 880px);
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.roverTurntable {
+  width: 100%;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.roverImg {
+  width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+  /* Glow muy contenido — el spotlight platform debajo hace casi todo */
+  filter:
+    drop-shadow(0 0 12px rgba(255, 255, 255, 0.14))
+    drop-shadow(0 30px 40px rgba(0, 0, 0, 0.55));
+}
+
+/* ───────────── Floating cards ───────────── */
+.cardLayer {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+
+.card {
+  position: absolute;
+  width: clamp(240px, 28vw, 300px);
+  padding: 18px 20px;
+  border-radius: var(--radius-lg);
+  background: rgba(15, 15, 22, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  box-shadow:
+    0 24px 60px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  pointer-events: auto;
+  will-change: transform, opacity, filter;
+}
+
+.pos_top_left      { top: 12%;    left: 4%; }
+.pos_top_right     { top: 12%;    right: 4%; }
+.pos_bottom_left   { bottom: 12%; left: 4%; }
+.pos_bottom_right  { bottom: 12%; right: 4%; }
+.pos_center_top    { top: 6%;     left: 50%; transform: translateX(-50%); }
+
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.cardIcon {
+  width: 34px;
+  height: 34px;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-md);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.12) 0%,
+    rgba(255, 255, 255, 0.02) 100%
+  );
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: var(--accent);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.06);
+}
+
+.cardIndex {
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--text-tertiary);
+}
+
+.cardTitle {
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.cardSpec {
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  opacity: 0.8;
+}
+
+.cardBody {
+  font-size: 12.5px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.cardLine {
+  position: absolute;
+  bottom: -1px;
+  left: 20px;
+  right: 20px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 255, 255, 0.6),
+    transparent
+  );
+  opacity: 0.5;
+}
+
+/* ───────────── Outro ───────────── */
+.outro {
+  position: absolute;
+  bottom: 12vh;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 6;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 24px;
+  max-width: 640px;
+}
+
+.outroTitle {
+  font-size: clamp(20px, 2.6vw, 28px);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--text-primary);
+}
+
+/* ───────────── Progress bar ───────────── */
+.progressTrack {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.05);
+  z-index: 8;
+}
+
+.progressFill {
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0.5),
+    var(--accent),
+    rgba(170, 210, 255, 0.7)
+  );
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.6);
+}
+
+/* ───────────── Responsive ───────────── */
+@media (max-width: 1024px) {
+  .card {
+    width: clamp(200px, 36vw, 270px);
+    padding: 14px 16px;
+  }
+  .cardTitle { font-size: 14px; }
+  .cardBody { font-size: 11px; }
+  .stagePlatform {
+    bottom: 22%;
+  }
+}
+
+@media (max-width: 720px) {
+  .section { height: 600vh; }
+
+  .titleBlock {
+    top: 8vh;
+  }
+  .titleBlock h2 { font-size: 26px; }
+  .titleBody { font-size: 13px; }
+
+  .roverContainer {
+    padding-top: 0;
+  }
+
+  .roverStage {
+    width: 95vw;
+  }
+
+  .stagePlatform {
+    bottom: 28%;
+  }
+
+  /* En móvil las cards aparecen en una sola posición central abajo */
+  .pos_top_left,
+  .pos_top_right,
+  .pos_bottom_left,
+  .pos_bottom_right,
+  .pos_center_top {
+    top: auto;
+    bottom: 12vh;
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: 380px;
+  }
+
+  .outro {
+    bottom: 4vh;
+    padding: 0 16px;
+  }
+  .outroTitle { font-size: 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .platformCore,
+  .platformRing,
+  .platformRingFar,
+  .particles span {
+    animation: none;
+  }
+}
